@@ -14,6 +14,7 @@ import Price from "../../../components/UI/Price";
 
 const ProductStore = (props) => {
   const product = useSelector((state) => state.product);
+  console.log(product);
   const priceRange = product.priceRange;
   const dispatch = useDispatch();
 

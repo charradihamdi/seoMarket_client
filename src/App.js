@@ -4,13 +4,11 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import HomePage from "./containers/HomePage";
 import ProductListPage from "./containers/ProductListPage";
 import { useDispatch, useSelector } from "react-redux";
-import { isUserLoggedIn, updateCart } from "./actions";
+import { isUserLoggedIn } from "./actions";
 import ProductDetailsPage from "./containers/ProductDetailsPage";
-import CartPage from "./containers/CartPage";
-import CheckoutPage from "./containers/CheckoutPage";
-import OrderPage from "./containers/OrderPage";
-import OrderDetailsPage from "./containers/OrderDetailsPage";
-
+import ActivationPage from "./containers/ActivationPage/ActivationPage";
+import Profil from "./containers/profil/index";
+import Website from "./containers/Website/Website";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -19,11 +17,7 @@ function App() {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     }
-  }, [auth.authenticate]);
-
-  useEffect(() => {
-    console.log("App.js - updateCart");
-    dispatch(updateCart());
+  
   }, [auth.authenticate]);
 
   return (
@@ -31,10 +25,9 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" exact component={HomePage} />
-          <Route path="/cart" component={CartPage} />
-          <Route path="/checkout" component={CheckoutPage} />
-          <Route path="/account/orders" component={OrderPage} />
-          <Route path="/order_details/:orderId" component={OrderDetailsPage} />
+          <Route path="/confirm/:activationcode" component={ActivationPage} />
+          <Route path="/profil" component={Profil} />
+          <Route path="/website" component={Website} />
           <Route
             path="/:productSlug/:productId/p"
             component={ProductDetailsPage}

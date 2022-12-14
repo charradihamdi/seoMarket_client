@@ -7,7 +7,6 @@ import { BiRupee } from "react-icons/bi";
 import { AiFillThunderbolt } from "react-icons/ai";
 import { MaterialButton } from "../../components/MaterialUI";
 import "./style.css";
-import { addToCart } from "../../actions";
 
 /**
  * @author
@@ -66,7 +65,7 @@ const ProductDetailsPage = (props) => {
                 onClick={() => {
                   const { _id, name, price } = product.productDetails;
                   const img = product.productDetails.productPictures[0].img;
-                  dispatch(addToCart({ _id, name, price, img }));
+
                   props.history.push(`/cart`);
                 }}
               />

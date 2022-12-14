@@ -56,6 +56,13 @@ export default (state = initState, action) => {
         productDetails: action.payload.productDetails,
       };
       break;
+    case productConstants.GET_User_PRODUCTS_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        products: action.payload.products,
+      };
+      break;
     case productConstants.GET_PRODUCT_DETAILS_BY_ID_FAILURE:
       state = {
         ...state,

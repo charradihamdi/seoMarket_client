@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import flipkartLogo from "../../images/logo/flipkart.png";
+
 import goldenStar from "../../images/logo/golden-star.png";
 import { IoIosArrowDown, IoIosCart, IoIosSearch } from "react-icons/io";
 import {
@@ -8,11 +8,13 @@ import {
   MaterialInput,
   MaterialButton,
   DropdownMenu,
+  MaterialSelect,
 } from "../MaterialUI";
 import { useDispatch, useSelector } from "react-redux";
 import { login, signout, getCartItems, signup as _signup } from "../../actions";
 import Cart from "../UI/Cart";
-
+import { NavLink, Link, Redirect } from "react-router-dom";
+import { profilePicture } from "./consPicture";
 /**
  * @author
  * @function Header
@@ -24,8 +26,13 @@ const Header = (props) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [statut, setStatut] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [sexe, setSexe] = useState("");
+  const [country, setCountry] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [sexeList, setSexeList] = useState("");
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -33,12 +40,25 @@ const Header = (props) => {
   const cart = useSelector((state) => state.cart);
 
   const userSignup = () => {
-    const user = { firstName, lastName, email, password };
+    const user = {
+      firstName,
+      lastName,
+      email,
+      password,
+      sexe,
+      contactNumber,
+      country,
+      statut,
+    };
     if (
       firstName === "" ||
       lastName === "" ||
       email === "" ||
-      password === ""
+      password === "" ||
+      sexe === "" ||
+      country === "" ||
+      contactNumber === "" ||
+      statut === ""
     ) {
       return;
     }
@@ -62,31 +82,27 @@ const Header = (props) => {
     if (auth.authenticate) {
       setLoginModal(false);
     }
+    if (auth.authenticate) {
+      return <Redirect to={`/`} />;
+    }
   }, [auth.authenticate]);
-
-  // useEffect(() => {
-  //   dispatch(getCartItems());
-  // }, []);
 
   const renderLoggedInMenu = () => {
     return (
       <DropdownMenu
-        menu={<a className="fullName">{auth.user.fullName}</a>}
+        menu={
+          <Link to="/profil" className="fullName">
+            <img
+              src={profilePicture}
+              alt=""
+              className="m-2"
+              style={{ width: "30px", height: "30px", borderRadius: "18%" }}
+            />
+          </Link>
+        }
         menus={[
-          { label: "My Profile", href: "", icon: null },
-          { label: "SuperCoin Zone", href: "", icon: null },
-          { label: "Flipkart Plus Zone", href: "", icon: null },
-          {
-            label: "Orders",
-            href: `/account/orders`,
-            icon: null,
-          },
-          { label: "Wishlist", href: "", icon: null },
-          { label: "My Chats", href: "", icon: null },
-          { label: "Coupons", href: "", icon: null },
-          { label: "Rewards", href: "", icon: null },
-          { label: "Notifications", href: "", icon: null },
-          { label: "Gift Cards", href: "", icon: null },
+          { label: "My Profile", href: "/profil", icon: null },
+          { label: "websites", href: "/website", icon: null },
           { label: "Logout", href: "", icon: null, onClick: logout },
         ]}
       />
@@ -107,21 +123,6 @@ const Header = (props) => {
             Login
           </a>
         }
-        menus={[
-          { label: "My Profile", href: "", icon: null },
-          { label: "Flipkart Plus Zone", href: "", icon: null },
-          {
-            label: "Orders",
-            href: `/account/orders`,
-            icon: null,
-            onClick: () => {
-              !auth.authenticate && setLoginModal(true);
-            },
-          },
-          { label: "Wishlist", href: "", icon: null },
-          { label: "Rewards", href: "", icon: null },
-          { label: "Gift Cards", href: "", icon: null },
-        ]}
         firstMenu={
           <div className="firstmenu">
             <span>New Customer?</span>
@@ -146,8 +147,8 @@ const Header = (props) => {
         <div className="authContainer">
           <div className="row">
             <div className="leftspace">
-              <h2>Login</h2>
-              <p>Get access to your Orders, Wishlist and Recommendations</p>
+              {signup ? <h2>Sign up</h2> : <h2>Login</h2>}
+              <p>Get access to websites, Wishlist and Recommendations</p>
             </div>
             <div className="rightspace">
               <div className="loginInputContainer">
@@ -170,10 +171,9 @@ const Header = (props) => {
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 )}
-
                 <MaterialInput
                   type="text"
-                  label="Email/Mobile Number"
+                  label="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -184,6 +184,71 @@ const Header = (props) => {
                   onChange={(e) => setPassword(e.target.value)}
                   // rightElement={<a href="#">Forgot?</a>}
                 />
+                {signup && (
+                  <MaterialInput
+                    type="number"
+                    label="contactNumber"
+                    value={contactNumber}
+                    onChange={(e) => setContactNumber(e.target.value)}
+                  />
+                )}
+                {signup && (
+                  <MaterialInput
+                    type="text"
+                    label="country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                  />
+                )}
+                <br />
+                {signup && (
+                  <>
+                    <select
+                      style={{ width: "100%", border: "1px solid white" }}
+                      className="form-select"
+                      type="select "
+                      label="sexe"
+                      placeholder="sexe"
+                      value={sexe}
+                      onChange={(e) => setSexe(e.target.value)}
+                    >
+                      <option value="--Please choose an option--">
+                        --Please choose an option--
+                      </option>
+                      <option value="male">male</option>
+                      <option value="female">female</option>
+                      <option value="other">other</option>
+                    </select>
+                  </>
+                )}
+
+                {signup && (
+                  <>
+                    <select
+                      style={{
+                        width: "100%",
+                        border: "1px solid white",
+                        marginTop: "20px",
+                      }}
+                      className="form-select mt-5"
+                      type="select "
+                      label="status"
+                      placeholder="status"
+                      value={statut}
+                      onChange={(e) => setStatut(e.target.value)}
+                    >
+                      <option value="--Please choose an option--">
+                        --Please choose an option--
+                      </option>
+
+                      <option value="bloggeur">bloggeur</option>
+                      <option value="company">company</option>
+                      <option value="agency">agency</option>
+                      <option value="site owner">site owner</option>
+                    </select>
+                  </>
+                )}
+
                 <MaterialButton
                   title={signup ? "Register" : "Login"}
                   bgColor="#fb641b"
@@ -192,15 +257,6 @@ const Header = (props) => {
                     margin: "40px 0 20px 0",
                   }}
                   onClick={userLogin}
-                />
-                <p style={{ textAlign: "center" }}>OR</p>
-                <MaterialButton
-                  title="Request OTP"
-                  bgColor="#ffffff"
-                  textColor="#2874f0"
-                  style={{
-                    margin: "20px 0",
-                  }}
                 />
               </div>
             </div>
@@ -211,12 +267,11 @@ const Header = (props) => {
         {/* Logo  */}
         <div className="logo">
           <a href="">
-            <img src={flipkartLogo} className="logoimage" alt="" />
+            <img src={""} className="logoimage" alt="" />
           </a>
           <a style={{ marginTop: "-10px" }}>
             <span className="exploreText">Explore</span>
             <span className="plusText">Plus</span>
-            <img src={goldenStar} className="goldenStar" alt="" />
           </a>
         </div>
         {/* logo ends here */}
@@ -230,7 +285,7 @@ const Header = (props) => {
           <div className="searchInputContainer">
             <input
               className="searchInput"
-              placeholder={"search for products, brands and more"}
+              placeholder={"search for websites, brands and more"}
             />
             <div className="searchIconContainer">
               <IoIosSearch
@@ -246,29 +301,8 @@ const Header = (props) => {
         {/* right side menu */}
         <div className="rightMenu">
           {auth.authenticate ? renderLoggedInMenu() : renderNonLoggedInMenu()}
-          <DropdownMenu
-            menu={
-              <a className="more">
-                <span>More</span>
-                <IoIosArrowDown />
-              </a>
-            }
-            menus={[
-              { label: "Notification Preference", href: "", icon: null },
-              { label: "Sell on flipkart", href: "", icon: null },
-              { label: "24x7 Customer Care", href: "", icon: null },
-              { label: "Advertise", href: "", icon: null },
-              { label: "Download App", href: "", icon: null },
-            ]}
-          />
-          <div>
-            <a href={`/cart`} className="cart">
-              <Cart count={Object.keys(cart.cartItems).length} />
-              <span style={{ margin: "0 10px" }}>Cart</span>
-            </a>
-          </div>
+          <DropdownMenu />
         </div>
-        {/* right side menu ends here */}
       </div>
     </div>
   );
