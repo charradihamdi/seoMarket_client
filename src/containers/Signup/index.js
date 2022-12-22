@@ -54,7 +54,10 @@ const Signup = (props) => {
 
   return (
     <Layout>
-      <Container>
+      <Container
+        className="mt-5"
+        style={{ marginTop: "150px", border: "1px solid white" }}
+      >
         {user.message}
         <Row style={{ marginTop: "50px" }}>
           <Col md={{ span: 6, offset: 3 }}>

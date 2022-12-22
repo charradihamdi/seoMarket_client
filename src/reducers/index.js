@@ -1,18 +1,16 @@
-import authReducer from './auth.reducers';
-import userReducer from './user.reducer';
-import productReducer from './product.reducer';
-import categoryReducer from './category.reducer';
-import orderReducer from './order.reducer';
-import pageReducer from './page.reducer';
-import { combineReducers } from 'redux';
+import authReducer from "./auth.reducers";
+import userReducer from "./user.reducer";
+import productReducer from "./product.reducer";
+import categoryReducer from "./category.reducer";
+import usersReducer from "./users.reducer";
+import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
-    auth: authReducer,
-    user: userReducer,
-    category: categoryReducer,
-    product: productReducer,
-    order: orderReducer,
-    page: pageReducer
+  auth: authReducer,
+  user: userReducer,
+  category: categoryReducer,
+  product: productReducer,
+  users: usersReducer,
 });
 
 export default rootReducer;
