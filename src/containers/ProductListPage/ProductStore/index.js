@@ -6,15 +6,17 @@ import Card from "../../../components/UI/Card";
 import { MaterialButton } from "../../../components/MaterialUI";
 import Rating from "../../../components/UI/Rating";
 import Price from "../../../components/UI/Price";
-
-/**
- * @author
- * @function ProductStore
- **/
-
+import Layout from "../../../components/Layout";
+import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import parse from "html-react-parser";
+import { profilePicture } from "../../../components/Header/consPicture";
+import "./style.css";
+import { getProductsByUserId } from "../../../actions/product.action";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import MenuHeader from "../../../components/MenuHeader";
 const ProductStore = (props) => {
   const product = useSelector((state) => state.product);
-  console.log(product);
   const priceRange = product.priceRange;
   const dispatch = useDispatch();
 
@@ -22,65 +24,69 @@ const ProductStore = (props) => {
     const { match } = props;
     dispatch(getProductsBySlug(match.params.slug));
   }, []);
+  if (product.products[0]) {
+    product.products = product.products.sort(function (a, b) {
+      let site1 = Date.parse(a.createdAt);
+      let site2 = Date.parse(b.createdAt);
 
+      return site2 - site1;
+    });
+  }
   return (
     <>
-      {Object.keys(product.productsByPrice).map((key, index) => {
-        return (
-          <Card
-            headerLeft={`${props.match.params.slug} mobile under ${priceRange[key]}`}
-            headerRight={
-              <MaterialButton
-                title={"VIEW ALL"}
-                style={{
-                  width: "96px",
-                }}
-                bgColor="#2874f0"
-                fontSize="12px"
-              />
-            }
-            style={{
-              width: "calc(100% - 40px)",
-              margin: "20px",
-            }}
-          >
-            <div style={{ display: "flex" }}>
-              {product.productsByPrice[key].map((product) => (
-                <Link
-                  to={`/${product.slug}/${product._id}/p`}
-                  style={{
-                    display: "block",
-                    textDecoration: "none",
-                    color: "#000",
-                  }}
-                  className="productContainer"
-                >
-                  <div className="productImgContainer">
-                    <img src={product.productPictures[0].img} alt="" />
-                  </div>
-                  <div className="productInfo">
-                    <div style={{ margin: "10px 0" }}>{product.name}</div>
-                    <div>
-                      <Rating value="4.3" />
-                      &nbsp;&nbsp;
-                      <span
-                        style={{
-                          color: "#777",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                        }}
-                      >
-                        (3353)
-                      </span>
-                    </div>
-                    <Price value={product.price} />
-                  </div>
-                </Link>
-              ))}
+      <Layout />
+      <MenuHeader />
+      <div>
+        <div className="headList">
+          <h3 className="itemTitle"></h3>
+          <h3 className="itemTitle">websites links</h3>
+          <h3 className="itemTitle">type of website</h3>
+          <h3 className="itemTitle">Price</h3>
+          <h3 className="itemTitle">Visitors per mounth</h3>
+        </div>
+        {product.products.map((site) => (
+          <div className="displaysites">
+            <div className="carouselItems">
+              <Carousel renderThumbs={() => {}}>
+                {site.productPictures.map((banner, index) => (
+                  <a
+                    key={index}
+                    style={{ display: "block" }}
+                    href={banner.navigateTo}
+                  >
+                    <img
+                      style={{ height: "80px", width: "100px" }}
+                      src={`http://localhost:5000${banner.img}`}
+                      alt={banner.img}
+                    />
+                  </a>
+                ))}
+              </Carousel>
             </div>
-          </Card>
-        );
-      })}
+            <Link to={`/product/${site._id}`} className="infosite">
+              <div className="infosite">
+                <p style={{ width: "30vw" }}>
+                  <div style={{ display: "flex", width: "56px" }}>
+                    {<Link>{site.url}</Link>}
+                  </div>
+                </p>
+                <p class="">
+                  <div>{site.typeSite}</div>
+                </p>
+                <p class="">
+                  <div>
+                    {site.publicationPrice}
+                    {site.devise}
+                  </div>
+                </p>
+                <p class="">
+                  <div>{site.visitorsPerMonth}(k)</div>
+                </p>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

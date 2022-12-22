@@ -35,6 +35,8 @@ const MaterialInput = (props) => {
         style={{
           top: 0,
           lineHeight: "none",
+          left: "0",
+          marginBottom: "14px",
         }}
       >
         {props.label && `Enter ${props.label}`}

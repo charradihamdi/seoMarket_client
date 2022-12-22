@@ -1,20 +1,20 @@
-import { authConstants, userContants } from "./constants";
 import axios from "../helpers/axios";
+import { authConstants, userContants } from "./constants";
+export const GET_USER = "GET_USER";
 
 export const userInfo = (user) => {
-  console.log(user);
-
   return async (dispatch) => {
     dispatch({ type: userContants.GET_USER_REQUEST });
-    const res = await axios.get(`/:uid`, {
+    const res = await axios.get(`/${user}`, {
       ...user,
     });
 
-    if (res.status === 201) {
-      const { message } = res.data;
+    if (res.status === 200) {
+      const { data } = res;
+
       dispatch({
         type: userContants.GET_USER_SUCCESS,
-        payload: { message },
+        payload: { data },
       });
     } else {
       if (res.status === 400) {
@@ -24,5 +24,19 @@ export const userInfo = (user) => {
         });
       }
     }
+  };
+};
+
+export const updateUser = (userId, data) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `http://localhost:5000/api/` + userId,
+      data: { data },
+    })
+      .then((res) => {
+        dispatch(userInfo(userId));
+      })
+      .catch((err) => console.log(err));
   };
 };

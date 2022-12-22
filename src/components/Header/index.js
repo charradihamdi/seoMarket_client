@@ -31,6 +31,8 @@ const Header = (props) => {
   const [sexe, setSexe] = useState("");
   const [country, setCountry] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [validateForum, setValidateForum] = useState(false);
   const [error, setError] = useState("");
   const [sexeList, setSexeList] = useState("");
   const auth = useSelector((state) => state.auth);
@@ -45,32 +47,35 @@ const Header = (props) => {
       lastName,
       email,
       password,
-      sexe,
-      contactNumber,
-      country,
-      statut,
     };
+    if (confirmPassword != password) {
+      alert("confirm password incorrect");
+    }
+    if (!validateForum) {
+      alert("accept the general rule ");
+    }
     if (
       firstName === "" ||
       lastName === "" ||
       email === "" ||
       password === "" ||
-      sexe === "" ||
-      country === "" ||
-      contactNumber === "" ||
-      statut === ""
+      confirmPassword != password ||
+      validateForum == false
     ) {
       return;
+    } else {
+      dispatch(_signup(user));
+      setLoginModal(false);
     }
-
-    dispatch(_signup(user));
   };
 
   const userLogin = () => {
     if (signup) {
       userSignup();
     } else {
-      dispatch(login({ email, password }));
+      dispatch(login({ email, password })).then(() => {
+        setLoginModal(false);
+      });
     }
   };
 
@@ -91,14 +96,12 @@ const Header = (props) => {
     return (
       <DropdownMenu
         menu={
-          <Link to="/profil" className="fullName">
-            <img
-              src={profilePicture}
-              alt=""
-              className="m-2"
-              style={{ width: "30px", height: "30px", borderRadius: "18%" }}
-            />
-          </Link>
+          <img
+            src={profilePicture}
+            alt=""
+            className="m-2"
+            style={{ width: "30px", height: "30px", borderRadius: "18%" }}
+          />
         }
         menus={[
           { label: "My Profile", href: "/profil", icon: null },
@@ -171,84 +174,53 @@ const Header = (props) => {
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 )}
+
                 <MaterialInput
                   type="text"
                   label="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <MaterialInput
-                  type="password"
-                  label="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  // rightElement={<a href="#">Forgot?</a>}
-                />
                 {signup && (
                   <MaterialInput
-                    type="number"
-                    label="contactNumber"
-                    value={contactNumber}
-                    onChange={(e) => setContactNumber(e.target.value)}
+                    type="password"
+                    label="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+
+                    // rightElement={<a href="#">Forgot?</a>}
+                  />
+                )}
+                {!signup && (
+                  <MaterialInput
+                    type="password"
+                    label="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    rightElement={<a href="/forget">Forgot?</a>}
+                    // rightElement={<a href="#">Forgot?</a>}
+                  />
+                )}
+
+                {signup && (
+                  <MaterialInput
+                    type="password"
+                    label="confirmPassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 )}
                 {signup && (
-                  <MaterialInput
-                    type="text"
-                    label="country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                  />
-                )}
-                <br />
-                {signup && (
                   <>
-                    <select
-                      style={{ width: "100%", border: "1px solid white" }}
-                      className="form-select"
-                      type="select "
-                      label="sexe"
-                      placeholder="sexe"
-                      value={sexe}
-                      onChange={(e) => setSexe(e.target.value)}
-                    >
-                      <option value="--Please choose an option--">
-                        --Please choose an option--
-                      </option>
-                      <option value="male">male</option>
-                      <option value="female">female</option>
-                      <option value="other">other</option>
-                    </select>
+                    <input
+                      style={{ marginTop: "15px" }}
+                      type="checkbox"
+                      value={validateForum}
+                      onChange={(e) => setValidateForum(!validateForum)}
+                    />
+                    validate forum
                   </>
                 )}
-
-                {signup && (
-                  <>
-                    <select
-                      style={{
-                        width: "100%",
-                        border: "1px solid white",
-                        marginTop: "20px",
-                      }}
-                      className="form-select mt-5"
-                      type="select "
-                      label="status"
-                      placeholder="status"
-                      value={statut}
-                      onChange={(e) => setStatut(e.target.value)}
-                    >
-                      <option value="--Please choose an option--">
-                        --Please choose an option--
-                      </option>
-
-                      <option value="bloggeur">bloggeur</option>
-                      <option value="company">company</option>
-                      <option value="agency">agency</option>
-                      <option value="site owner">site owner</option>
-                    </select>
-                  </>
-                )}
-
                 <MaterialButton
                   title={signup ? "Register" : "Login"}
                   bgColor="#fb641b"
@@ -266,8 +238,13 @@ const Header = (props) => {
       <div className="subHeader">
         {/* Logo  */}
         <div className="logo">
-          <a href="">
-            <img src={""} className="logoimage" alt="" />
+          <a
+            href="/"
+            className="header-promo  w-inline-block"
+            style={{ background: "#DF3411", width: "70px" }}
+          >
+            <div className="label bg-success">Market</div>
+            <div className="header-promo-text"></div>
           </a>
           <a style={{ marginTop: "-10px" }}>
             <span className="exploreText">Explore</span>
@@ -300,7 +277,16 @@ const Header = (props) => {
 
         {/* right side menu */}
         <div className="rightMenu">
-          {auth.authenticate ? renderLoggedInMenu() : renderNonLoggedInMenu()}
+          <a
+            className="loginButton"
+            href="/websites"
+            style={{ marginRight: "15px" }}
+          >
+            websites
+          </a>
+          {auth.authenticate && auth.user.isActive
+            ? renderLoggedInMenu()
+            : renderNonLoggedInMenu()}
           <DropdownMenu />
         </div>
       </div>

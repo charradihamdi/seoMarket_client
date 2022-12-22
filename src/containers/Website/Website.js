@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import EditorToolbar, { modules, formats } from "./EditorToolbar";
 import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import { useHistory } from "react-router-dom";
 import goldenStar from "../../images/logo/golden-star.png";
 import { IoIosArrowDown, IoIosCart, IoIosSearch } from "react-icons/io";
 import draftToHtml from "draftjs-to-html";
+import parse from "html-react-parser";
 import Cart from "../../components/UI/Cart";
+import ReactHtmlParser from "react-html-parser";
 import {
   Modal,
   MaterialInput,
@@ -23,30 +28,44 @@ import { NavLink, Link } from "react-router-dom";
 import { profilePicture } from "../../components/Header/consPicture";
 import Layout from "../../components/Layout";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
-import { getProductsByUserId } from "../../actions/product.action";
-
-/**
- * @author
- * @function Header
- **/
-
+import {
+  getProductsByUserId,
+  deleteProductById,
+  updateProduct,
+} from "../../actions/product.action";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import {
+  IoIosCheckboxOutline,
+  IoIosCheckbox,
+  IoIosArrowForward,
+  IoIosAdd,
+  IoIosTrash,
+  IoIosCloudUpload,
+} from "react-icons/io";
+import { getAllCategory } from "../../actions";
 const Website = () => {
+  useEffect(() => {
+    dispatch(getAllCategory());
+  }, []);
+
+  const [descriptionValueOne, setDescriptionValueOne] = useState({});
   const [websiteModal, setWebsiteModal] = useState(false);
+  const [websiteUpdateModal, setWebsiteUpdateModal] = useState(false);
   const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  // const [description, setDescription] = useState("");
-  const [publicationPrice, setPublicationPrice] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const [url, setUrl] = useState("https://");
+  const [publicationPrice, setPublicationPrice] = useState(0);
   const [devise, setDevice] = useState("");
   const [typeSite, setTypeSite] = useState("");
   const [productPictures, setProductPictures] = useState([]);
   const [productsList, setProductsList] = useState([]);
-  // const [editorState, setEditorStateChange] = useState([]);
-
-  const [visitorsPerMonth, setVisitorsPerMounth] = useState("");
+  const [DescriptionValue, setDescriptionValue] = useState("");
+  const [visitorsPerMonth, setVisitorsPerMounth] = useState(0);
   const [categoryId, setCategoryId] = useState("");
   const [error, setError] = useState("");
+  const [errorDescription, setErrorDiscription] = useState("");
   const [sexeList, setSexeList] = useState("");
-
   let history = useHistory();
   const [userInfo, setuserInfo] = useState({
     title: "",
@@ -60,42 +79,31 @@ const Website = () => {
 
   let editorState = EditorState.createEmpty();
   const [description, setDescription] = useState(editorState);
-  const onEditorStateChange = (editorState) => {
-    console.log("strlength", description.value);
-    if (description) setDescription(editorState);
-  };
-  const addDetails = async (event) => {
-    try {
-      event.preventDefault();
-      event.persist();
-      if (userInfo.description.value.length < 50) {
-        setError("Required, Add description minimum length 50 characters");
-        return;
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
+
   const auth = useSelector((state) => state.auth);
   const category = useSelector((state) => state.category);
+
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("authuser._id", auth.user._id);
     dispatch(getProductsByUserId(auth.user._id));
   }, [auth]);
   const webSite = useSelector((state) => state.product);
+  if (webSite.products[0]) {
+    webSite.products = webSite.products.sort(function (a, b) {
+      let site1 = Date.parse(a.createdAt);
+      let site2 = Date.parse(b.createdAt);
 
+      return site2 - site1;
+    });
+    console.log(webSite.products);
+  }
   useEffect(() => {
     setProductsList(webSite.products.products);
   }, [webSite]);
-  // state cart value
-  const cart = useSelector((state) => state.cart);
+
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
       options.push({ value: category._id, name: category.name });
-      if (category.children.length > 0) {
-        createCategoryList(category.children, options);
-      }
     }
     return options;
   };
@@ -104,7 +112,7 @@ const Website = () => {
     form.append("name", name);
     form.append("url", url);
     form.append("publicationPrice", publicationPrice);
-    form.append("description", description);
+    form.append("description", descriptionValueOne);
     form.append("category", categoryId);
     form.append("devise", devise);
     form.append("typeSite", typeSite);
@@ -114,97 +122,293 @@ const Website = () => {
       i++;
       if (i < 5) form.append("productPicture", pic);
     }
-    dispatch(addProduct(form)).then(() => {
-      setWebsiteModal(false);
-    });
+
+    if (descriptionValueOne.length == undefined) {
+      alert("description required min 50 char");
+    }
+    if (!url.includes("https://") || !url.includes(".")) {
+      alert("https:// required in url and domain name ");
+    } else if (productPictures.length < 1) {
+      alert("insert pictures");
+    } else {
+      dispatch(addProduct(form)).then(() => {
+        setWebsiteModal(false);
+        dispatch(getProductsByUserId(auth.user._id));
+      });
+    }
+  };
+
+  const submitwebSiteUpdateForm = () => {
+    const data = {
+      id: siteId,
+      categoryId: categoryId,
+      uid: auth.user._id,
+      name: name,
+      url: url,
+      publicationPrice: publicationPrice,
+      devise: devise,
+      typeSite: typeSite,
+      visitorsPerMonth: visitorsPerMonth,
+    };
+    if (descriptionValueOne.length > 5000) {
+      alert("description too long,maximum length required is 5000 char");
+    }
+    if (!url.includes("https://")) {
+      alert("https:// required in url");
+    }
+    if (
+      categoryId == "" ||
+      name == "" ||
+      publicationPrice == 0 ||
+      devise == "" ||
+      visitorsPerMonth == 0
+    ) {
+      alert("fill forum");
+    } else {
+      dispatch(updateProduct(siteId, data, auth.user._id)).then(() => {
+        setWebsiteUpdateModal(false);
+      });
+    }
   };
   const handlewebSitePictures = (e) => {
     if (productPictures.length < 5)
       setProductPictures([...productPictures, e.target.files[0]]);
   };
-  console.log(webSite);
+
   const renderwebSites = () => {
     return (
       <Container className="cardItems">
         {webSite.products && webSite
           ? webSite.products.map((site) => {
-              console.log(site);
               return (
-                <ul class="cards">
-                  <li>
-                    <a href="" class="card">
-                      <img
-                        src="https://i.imgur.com/oYiTqum.jpg"
-                        class="card__image"
-                        alt=""
-                      />
-                      <div class="card__overlay">
-                        <div class="card__header">
-                          <svg
-                            class="card__arc"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path />
-                          </svg>
-                          <img
-                            class="card__thumb"
-                            src={profilePicture}
-                            alt=""
+                <>
+                  <ul className="cards">
+                    <li>
+                      <div className="action">
+                        <button
+                          onClick={() => {
+                            const payload = {
+                              productId: site._id,
+                            };
+                            dispatch(deleteProductById(payload)).then(() => {
+                              dispatch(getProductsByUserId(auth.user._id));
+                            });
+                          }}
+                        >
+                          <IoIosTrash className="iconSite" />
+                        </button>
+                        {renderUpdateModel(site)}
+                        <button>
+                          <IoIosCloudUpload
+                            className="iconSite"
+                            onClick={() => setWebsiteUpdateModal(true)}
                           />
-                          <div class="card__header-text">
-                            <h3 class="card__title">{site.name}</h3>
-                            <span class="card__status">{site.createdAt}</span>
-                          </div>
-                          <span className="span">
-                            {site.isActive ? (
-                              <span
-                                style={{
-                                  color: "green",
-                                  border: "1px solid white",
-                                }}
-                              >
-                                active
-                              </span>
-                            ) : (
-                              <span
-                                style={{
-                                  color: "red",
-                                  border: "1px solid white",
-                                }}
-                              >
-                                not active
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                        <p class="card__description">
-                          URL:<div>{site.url}</div>
-                        </p>
-                        <p class="card__description">
-                          PRICE OF PUBLIACTION:
-                          <div>{site.publicationPrice}</div>
-                        </p>
-                        <p class="card__description">
-                          DEVICE:<div>{site.devise}</div>
-                        </p>
-                        <p class="card__description">
-                          type of site :<div>{site.typeSite}</div>
-                        </p>
-                        <p class="card__description">
-                          visitors per mounth:<div>{site.visitorsPerMonth}</div>
-                        </p>
-                        <p class="card__description">
-                          category:<div>{site.category.name}</div>
-                        </p>
+                        </button>
                       </div>
-                    </a>
-                  </li>
-                </ul>
+                      <a className="card">
+                        <div className="card__overlay">
+                          <div className="card__header">
+                            <svg
+                              className="card__arc"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path />
+                            </svg>
+                            <img
+                              className="card__thumb"
+                              src={`http://localhost:5000${site.productPictures[0].img}`}
+                              alt=""
+                            />
+                            <div className="card__header-text">
+                              <h3 className="card__title">{site.name}</h3>
+                              <span className="card__status">
+                                {site.createdAt}
+                              </span>
+                            </div>
+                            <span className="">
+                              {site.isActive ? (
+                                <span
+                                  style={{
+                                    color: "green",
+                                    border: "1px solid white",
+                                  }}
+                                >
+                                  active
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    color: "red",
+                                    border: "1px solid white",
+                                  }}
+                                >
+                                  not active
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </>
               );
             })
           : null}
       </Container>
     );
+  };
+
+  const renderUpdateModel = (site) => {
+    return (
+      <Modal
+        visible={websiteUpdateModal}
+        onClose={() => setWebsiteUpdateModal(false)}
+      >
+        <h3 className="headUpdate">Update website </h3>
+        <div
+          className="authContainer"
+          style={{
+            width: "1200px",
+            border: "1px solid white",
+            padding: "10px 10px 10px 10px",
+          }}
+        >
+          <div className="row">
+            <div className="rightspace">
+              <div className="loginInputContainer">
+                <MaterialInput
+                  type="text"
+                  label="name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setSiteId(site._id);
+                  }}
+                />
+                <MaterialInput
+                  type="url"
+                  label="url site"
+                  placeholder="https://example.com"
+                  pattern="https://.*"
+                  size="30"
+                  value={url}
+                  onChange={(e) => {
+                    setSiteId(site._id);
+                    setUrl(e.target.value);
+                  }}
+                />
+
+                <MaterialInput
+                  className="required"
+                  type="Number"
+                  label="publication Price"
+                  value={publicationPrice}
+                  onChange={(e) => {
+                    setPublicationPrice(e.target.value);
+                    setSiteId(site._id);
+                  }}
+                />
+
+                <MaterialInput
+                  className="required"
+                  type="Number"
+                  label="Number of visitors Per Month"
+                  value={visitorsPerMonth}
+                  onChange={(e) => {
+                    setVisitorsPerMounth(e.target.value);
+                    setSiteId(site._id);
+                  }}
+                />
+                <br />
+
+                <>
+                  <select
+                    className="form-control required"
+                    style={{
+                      width: "100%",
+                      marginTop: "30px",
+                      border: "1px solid white",
+                      borderBottom: "2px solid #2874F0",
+                    }}
+                    value={devise}
+                    onChange={(e) => {
+                      setDevice(e.target.value);
+                      setSiteId(site._id);
+                    }}
+                    required
+                  >
+                    <option>select devise </option>
+                    <option value="Usd">Usd</option>
+                    <option value="Euro">Euro</option>
+                    <option value="Tnd">Tnd</option>
+                  </select>
+                </>
+                <br />
+
+                <select
+                  className="form-control required"
+                  style={{
+                    width: "100%",
+                    marginTop: "30px",
+                    border: "1px solid white",
+                    borderBottom: "2px solid #2874F0",
+                  }}
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
+                  required
+                >
+                  <option>select category</option>
+                  {createCategoryList(category.categories).map((option) => (
+                    <option key={option.value} value={option.value} required>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+                <>
+                  <select
+                    className="form-control required"
+                    style={{
+                      width: "100%",
+                      marginTop: "30px",
+                      border: "1px solid white",
+                      borderBottom: "2px solid #2874F0",
+                    }}
+                    value={typeSite}
+                    onChange={(e) => {
+                      setTypeSite(e.target.value);
+                      setSiteId(site._id);
+                    }}
+                    required
+                  >
+                    <option>select type of site </option>
+
+                    <option value="site">site</option>
+                    <option value="blog">blog</option>
+                    <option value="Magazine">Magazine</option>
+                  </select>
+                </>
+
+                <MaterialButton
+                  title={"submit"}
+                  textColor="#ffffff"
+                  style={{
+                    margin: "40px 0 20px 0",
+                    width: "full-content",
+                  }}
+                  onClick={() => {
+                    submitwebSiteUpdateForm();
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    );
+  };
+  const handleEditor = (e) => {
+    setDescriptionValueOne(e);
   };
   return (
     <Layout className="header">
@@ -220,7 +424,10 @@ const Website = () => {
       <Modal visible={websiteModal} onClose={() => setWebsiteModal(false)}>
         <div
           className="authContainer"
-          style={{ width: "1200px", border: "1px solid white" }}
+          style={{
+            width: "1500px",
+            height: "120vh",
+          }}
         >
           <div className="row">
             <div className="rightspace">
@@ -230,12 +437,17 @@ const Website = () => {
                   label="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
                 />
                 <MaterialInput
-                  type="text"
-                  label="url site"
+                  type="url"
+                  label="url https://example.com"
+                  placeholder="https://example.com"
+                  pattern="https://.*"
+                  size="30"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
+                  required
                 />
                 <div
                   className="form-group col-md-12 editor "
@@ -245,53 +457,41 @@ const Website = () => {
                     height: "60vh",
                   }}
                 >
-                  <label className="font-weight-bold">
-                    <span
-                      className="required"
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        color: "#848280",
-                      }}
-                    >
-                      {" "}
-                      Description
-                    </span>{" "}
-                  </label>
-                  <Editor
-                    style={{ marginTop: "30px" }}
-                    editorState={description}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName"
-                    editorClassName="editorClassName"
-                    onEditorStateChange={onEditorStateChange}
-                  />
-                  <textarea
-                    style={{ display: "none" }}
-                    disabled
-                    ref={(val) => (userInfo.description = val)}
-                    value={draftToHtml(
-                      convertToRaw(description.getCurrentContent())
-                    )}
-                  />
+                  <div className="form-group col-md-12 editor">
+                    <label className="font-weight-bold"></label>
+                    <EditorToolbar toolbarId={"t2"} />
+                    <ReactQuill
+                      className="scroll"
+                      theme="snow"
+                      value={descriptionValueOne}
+                      onChange={(e) => handleEditor(e)}
+                      placeholder={"Write something awesome..."}
+                      modules={modules("t2")}
+                      formats={formats}
+                    />
+                  </div>
                 </div>
 
                 <MaterialInput
+                  className="required"
                   type="Number"
                   label="publication Price"
                   value={publicationPrice}
                   onChange={(e) => setPublicationPrice(e.target.value)}
+                  required
                 />
                 <MaterialInput
+                  className="required"
                   type="Number"
                   label="Number of visitors Per Month"
                   value={visitorsPerMonth}
                   onChange={(e) => setVisitorsPerMounth(e.target.value)}
+                  required
                 />
                 <br />
 
                 <select
-                  className="form-control "
+                  className="form-control required"
                   style={{
                     width: "100%",
                     marginTop: "30px",
@@ -300,17 +500,18 @@ const Website = () => {
                   }}
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
+                  required
                 >
                   <option>select category</option>
                   {createCategoryList(category.categories).map((option) => (
-                    <option key={option.value} value={option.value}>
+                    <option key={option.value} value={option.value} required>
                       {option.name}
                     </option>
                   ))}
                 </select>
                 <>
                   <select
-                    className="form-control "
+                    className="form-control required"
                     style={{
                       width: "100%",
                       marginTop: "30px",
@@ -319,6 +520,7 @@ const Website = () => {
                     }}
                     value={devise}
                     onChange={(e) => setDevice(e.target.value)}
+                    required
                   >
                     <option>select device </option>
 
@@ -329,7 +531,7 @@ const Website = () => {
                 </>
                 <>
                   <select
-                    className="form-control "
+                    className="form-control required"
                     style={{
                       width: "100%",
                       marginTop: "30px",
@@ -338,6 +540,7 @@ const Website = () => {
                     }}
                     value={typeSite}
                     onChange={(e) => setTypeSite(e.target.value)}
+                    required
                   >
                     <option>select type of site </option>
 
@@ -354,7 +557,7 @@ const Website = () => {
                     border: "1px solid white",
                     borderBottom: "2px solid #2874F0",
                   }}
-                  className="form-control"
+                  className="form-control required"
                   type="file"
                   name="webSitePicture"
                   onChange={handlewebSitePictures}
@@ -376,6 +579,7 @@ const Website = () => {
                   )}
                 </div>
                 <MaterialButton
+                  className="required"
                   title={"submit"}
                   bgColor="#fb641b"
                   textColor="#ffffff"
@@ -389,6 +593,7 @@ const Website = () => {
           </div>
         </div>
       </Modal>
+
       <Container>
         <Row>
           <Col>{renderwebSites()}</Col>

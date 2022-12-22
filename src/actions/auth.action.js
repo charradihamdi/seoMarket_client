@@ -89,6 +89,7 @@ export const signout = () => {
     dispatch({ type: authConstants.LOGOUT_REQUEST });
     // localStorage.removeItem('user');
     // localStorage.removeItem('token');
+    window.location = "/";
     localStorage.clear();
     dispatch({ type: authConstants.LOGOUT_SUCCESS });
     dispatch({ type: cartConstants.RESET_CART });

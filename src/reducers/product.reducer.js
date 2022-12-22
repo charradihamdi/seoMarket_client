@@ -2,9 +2,9 @@ import { productConstants } from "../actions/constants";
 
 const initState = {
   products: [],
-  priceRange: {},
-  productsByPrice: {},
+
   pageRequest: false,
+  user: {},
   page: {},
   error: null,
   productDetails: {},
@@ -17,10 +17,6 @@ export default (state = initState, action) => {
       state = {
         ...state,
         products: action.payload.products,
-        priceRange: action.payload.priceRange,
-        productsByPrice: {
-          ...action.payload.productsByPrice,
-        },
       };
       break;
     case productConstants.GET_PRODUCT_PAGE_REQUEST:
@@ -54,6 +50,7 @@ export default (state = initState, action) => {
         ...state,
         loading: false,
         productDetails: action.payload.productDetails,
+        user: action.payload.user,
       };
       break;
     case productConstants.GET_User_PRODUCTS_SUCCESS:

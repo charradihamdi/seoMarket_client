@@ -1,10 +1,10 @@
 import axios from "../helpers/axios";
 import { productConstants } from "./constants";
 
-export const getProductsBySlug = (slug) => {
+export const getProductsBySlug = (payload) => {
   return async (dispatch) => {
-    const res = await axios.get(`/products/${slug}`);
-    console.log("resproducts", res);
+    const res = await axios.post(`/products/filter`, payload);
+
     if (res.status === 200) {
       dispatch({
         type: productConstants.GET_PRODUCTS_BY_SLUG,
@@ -52,9 +52,10 @@ export const getProductDetailsById = (payload) => {
       const { productId } = payload.params;
       res = await axios.get(`/product/${productId}`);
       console.log(res);
+
       dispatch({
         type: productConstants.GET_PRODUCT_DETAILS_BY_ID_SUCCESS,
-        payload: { productDetails: res.data.product },
+        payload: { productDetails: res.data.product, user: res.data.user },
       });
     } catch (error) {
       console.log(error);
@@ -105,12 +106,11 @@ export const getProducts = () => {
 };
 
 export const getProductsByUserId = (id) => {
-  console.log(id);
   return async (dispatch) => {
     try {
       dispatch({ type: productConstants.GET_User_PRODUCTS_REQUEST });
       const res = await axios.get(`/${id}/products`);
-      console.log("res11", res);
+
       if (res.status === 200) {
         const { products } = res.data;
         dispatch({
@@ -120,6 +120,47 @@ export const getProductsByUserId = (id) => {
       } else {
         dispatch({ type: productConstants.GET_User_PRODUCTS_FAILURE });
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const deleteProductById = (payload) => {
+  return async (dispatch) => {
+    let { productId } = payload;
+
+    try {
+      const res = await axios.delete(`product/${productId}`);
+
+      dispatch({ type: productConstants.DELETE_PRODUCT_BY_ID_REQUEST });
+      if (res.status === 202) {
+        dispatch({ type: productConstants.DELETE_PRODUCT_BY_ID_SUCCESS });
+
+        dispatch(getProducts());
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: productConstants.DELETE_PRODUCT_BY_ID_FAILURE,
+          payload: {
+            error,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const updateProduct = (productId, data, id) => {
+  console.log(data);
+  return async (dispatch) => {
+    try {
+      dispatch({ type: "UPDATE_PRODUCT_REQUEST" });
+      const res = await axios.put(`/product/update`, data).then(() => {
+        dispatch(getProductsByUserId(id));
+      });
+      console.log(res);
     } catch (error) {
       console.log(error);
     }

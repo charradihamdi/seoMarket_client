@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductDetailsById } from "../../actions";
 import Layout from "../../components/Layout";
@@ -8,6 +8,8 @@ import { AiFillThunderbolt } from "react-icons/ai";
 import { MaterialButton } from "../../components/MaterialUI";
 import "./style.css";
 
+import parse from "react-html-parser";
+import { Link } from "react-router-dom";
 /**
  * @author
  * @function ProductDetailsPage
@@ -19,19 +21,19 @@ const ProductDetailsPage = (props) => {
 
   useEffect(() => {
     const { productId } = props.match.params;
-    console.log(props);
+
     const payload = {
       params: {
         productId,
       },
     };
-    dispatch(getProductDetailsById(payload));
+    dispatch(getProductDetailsById(payload)).then(() => {});
   }, []);
 
   if (Object.keys(product.productDetails).length === 0) {
     return null;
   }
-
+  console.log(product.productDetails);
   return (
     <Layout>
       {/* <div>{product.productDetails.name}</div> */}
@@ -40,92 +42,50 @@ const ProductDetailsPage = (props) => {
           <div className="verticalImageStack">
             {product.productDetails.productPictures.map((thumb, index) => (
               <div className="thumbnail">
-                <img src={thumb.img} alt={thumb.img} />
+                <img
+                  src={`http://localhost:5000${thumb.img}`}
+                  alt={thumb.img}
+                />
               </div>
             ))}
           </div>
           <div className="productDescContainer">
             <div className="productDescImgContainer">
               <img
-                src={product.productDetails.productPictures[0].img}
+                src={`http://localhost:5000${product.productDetails.productPictures[0].img}`}
                 alt={`${product.productDetails.productPictures[0].img}`}
-              />
-            </div>
-
-            {/* action buttons */}
-            <div className="flexRow">
-              <MaterialButton
-                title="ADD TO CART"
-                bgColor="#ff9f00"
-                textColor="#ffffff"
-                style={{
-                  marginRight: "5px",
-                }}
-                icon={<IoMdCart />}
-                onClick={() => {
-                  const { _id, name, price } = product.productDetails;
-                  const img = product.productDetails.productPictures[0].img;
-
-                  props.history.push(`/cart`);
-                }}
-              />
-              <MaterialButton
-                title="BUY NOW"
-                bgColor="#fb641b"
-                textColor="#ffffff"
-                style={{
-                  marginLeft: "5px",
-                }}
-                icon={<AiFillThunderbolt />}
               />
             </div>
           </div>
         </div>
         <div>
-          {/* home > category > subCategory > productName */}
           <div className="breed">
             <ul>
               <li>
-                <a href="#">Home</a>
+                <a href="/">Home</a>
                 <IoIosArrowForward />
               </li>
-              <li>
-                <a href="#">Mobiles</a>
-                <IoIosArrowForward />
-              </li>
-              <li>
-                <a href="#">Samsung</a>
-                <IoIosArrowForward />
-              </li>
+
               <li>
                 <a href="#">{product.productDetails.name}</a>
               </li>
             </ul>
           </div>
           {/* product description */}
-          <div className="productDetails">
-            <p className="productTitle">{product.productDetails.name}</p>
-            <div>
-              <span className="ratingCount">
-                4.3 <IoIosStar />
-              </span>
-              <span className="ratingNumbersReviews">
-                72,234 Ratings & 8,140 Reviews
-              </span>
+          <div className="">
+            <p className="ratingCount">{product.productDetails.name}</p>
+            <div className="visitors">
+              visitors per mounth : {product.productDetails.visitorsPerMonth}
+              (k)
             </div>
-            <div className="extraOffer">
-              Extra <BiRupee />
-              4500 off{" "}
-            </div>
-            <div className="flexRow priceContainer">
+            <div className="">
               <span className="price">
-                <BiRupee />
-                {product.productDetails.price}
+                publicationPrice:
+                <span style={{ fontSize: "18px" }}>
+                  {product.productDetails.publicationPrice}
+                  {product.productDetails.devise}
+                </span>
               </span>
-              <span className="discount" style={{ margin: "0 10px" }}>
-                22% off
-              </span>
-              {/* <span>i</span> */}
             </div>
             <div>
               <p
@@ -135,31 +95,38 @@ const ProductDetailsPage = (props) => {
                   fontWeight: "600",
                 }}
               >
-                Available Offers
+                type of site : {product.productDetails.typeSite}
               </p>
-              <p style={{ display: "flex" }}>
-                <span
-                  style={{
-                    width: "100px",
-                    fontSize: "12px",
-                    color: "#878787",
-                    fontWeight: "600",
-                    marginRight: "20px",
-                  }}
-                >
-                  Description
-                </span>
-                <span
-                  style={{
-                    fontSize: "12px",
-                    color: "#212121",
-                  }}
-                >
-                  {product.productDetails.description}
-                </span>
-              </p>
+              <a href={product.productDetails.url}>
+                {product.productDetails.url}
+              </a>
             </div>
           </div>
+          <span
+            style={{
+              width: "100px",
+              fontSize: "40px",
+              color: "#878787",
+              fontWeight: "600",
+              marginRight: "20px",
+            }}
+          >
+            <span className="description">Description:</span>
+          </span>
+          <p style={{ display: "flex", padding: "0 0 0 10vw" }}>
+            <span
+              style={{
+                fontSize: "12px",
+                color: "#212121",
+              }}
+            >
+              {parse(product.productDetails.description)}
+            </span>
+          </p>
+        </div>
+        <div className="userContact">
+          <div className="contact"> Email : {product.user.email}</div>
+          <div className="contact"> Phone:{product.user.contactNumber}</div>
         </div>
       </div>
     </Layout>
