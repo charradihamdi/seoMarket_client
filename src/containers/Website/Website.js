@@ -4,81 +4,58 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import EditorToolbar, { modules, formats } from "./EditorToolbar";
-import { EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
 import { useHistory } from "react-router-dom";
-import goldenStar from "../../images/logo/golden-star.png";
-import { IoIosArrowDown, IoIosCart, IoIosSearch } from "react-icons/io";
-import draftToHtml from "draftjs-to-html";
-import parse from "html-react-parser";
-import Cart from "../../components/UI/Cart";
-import ReactHtmlParser from "react-html-parser";
 import {
   Modal,
   MaterialInput,
   MaterialButton,
-  DropdownMenu,
-  MaterialSelect,
 } from "../../components/MaterialUI";
-import Card from "../../components/UI/Card";
+
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../actions";
 
-import { NavLink, Link } from "react-router-dom";
-import { profilePicture } from "../../components/Header/consPicture";
 import Layout from "../../components/Layout";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import {
   getProductsByUserId,
   deleteProductById,
   updateProduct,
 } from "../../actions/product.action";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import {
-  IoIosCheckboxOutline,
-  IoIosCheckbox,
-  IoIosArrowForward,
-  IoIosAdd,
-  IoIosTrash,
-  IoIosCloudUpload,
-} from "react-icons/io";
+
+import { IoIosTrash, IoIosCloudUpload } from "react-icons/io";
 import { getAllCategory } from "../../actions";
+
+const [descriptionValueOne, setDescriptionValueOne] = useState({});
+const [websiteModal, setWebsiteModal] = useState(false);
+const [websiteUpdateModal, setWebsiteUpdateModal] = useState(false);
+const [name, setName] = useState("");
+const [siteId, setSiteId] = useState("");
+const [url, setUrl] = useState("");
+const [publicationPrice, setPublicationPrice] = useState(0);
+const [devise, setDevice] = useState("");
+const [typeSite, setTypeSite] = useState("");
+const [productPictures, setProductPictures] = useState([]);
+const [productsList, setProductsList] = useState([]);
+
+const [visitorsPerMonth, setVisitorsPerMounth] = useState(0);
+const [categoryId, setCategoryId] = useState("");
+const [error, setError] = useState("");
+const [errorDescription, setErrorDiscription] = useState("");
+const [sexeList, setSexeList] = useState("");
+let history = useHistory();
+const [userInfo, setuserInfo] = useState({
+  title: "",
+});
 const Website = () => {
   useEffect(() => {
     dispatch(getAllCategory());
   }, []);
-
-  const [descriptionValueOne, setDescriptionValueOne] = useState({});
-  const [websiteModal, setWebsiteModal] = useState(false);
-  const [websiteUpdateModal, setWebsiteUpdateModal] = useState(false);
-  const [name, setName] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [url, setUrl] = useState("https://");
-  const [publicationPrice, setPublicationPrice] = useState(0);
-  const [devise, setDevice] = useState("");
-  const [typeSite, setTypeSite] = useState("");
-  const [productPictures, setProductPictures] = useState([]);
-  const [productsList, setProductsList] = useState([]);
-  const [DescriptionValue, setDescriptionValue] = useState("");
-  const [visitorsPerMonth, setVisitorsPerMounth] = useState(0);
-  const [categoryId, setCategoryId] = useState("");
-  const [error, setError] = useState("");
-  const [errorDescription, setErrorDiscription] = useState("");
-  const [sexeList, setSexeList] = useState("");
-  let history = useHistory();
-  const [userInfo, setuserInfo] = useState({
-    title: "",
-  });
   const onChangeValue = (e) => {
     setuserInfo({
       ...userInfo,
       [e.target.name]: e.target.value,
     });
   };
-
-  let editorState = EditorState.createEmpty();
-  const [description, setDescription] = useState(editorState);
 
   const auth = useSelector((state) => state.auth);
   const category = useSelector((state) => state.category);
@@ -97,9 +74,6 @@ const Website = () => {
     });
     console.log(webSite.products);
   }
-  useEffect(() => {
-    setProductsList(webSite.products.products);
-  }, [webSite]);
 
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
@@ -126,7 +100,12 @@ const Website = () => {
     if (descriptionValueOne.length == undefined) {
       alert("description required min 50 char");
     }
-    if (!url.includes("https://") || !url.includes(".")) {
+    if (
+      !url.includes("https://") ||
+      !url.includes("http://") ||
+      !url.includes("www.") ||
+      !url.includes(".")
+    ) {
       alert("https:// required in url and domain name ");
     } else if (productPictures.length < 1) {
       alert("insert pictures");
@@ -134,6 +113,14 @@ const Website = () => {
       dispatch(addProduct(form)).then(() => {
         setWebsiteModal(false);
         dispatch(getProductsByUserId(auth.user._id));
+        setWebsiteUpdateModal(false);
+        setCategoryId("");
+
+        setDescriptionValueOne("");
+        setDevice("");
+        setName("");
+        setProductPictures([]);
+        setName("");
       });
     }
   };
@@ -167,6 +154,12 @@ const Website = () => {
     } else {
       dispatch(updateProduct(siteId, data, auth.user._id)).then(() => {
         setWebsiteUpdateModal(false);
+        setCategoryId("");
+        setDescriptionValueOne("");
+        setDevice("");
+        setName("");
+        setProductPictures([]);
+        setName("");
       });
     }
   };
@@ -184,28 +177,7 @@ const Website = () => {
                 <>
                   <ul className="cards">
                     <li>
-                      <div className="action">
-                        <button
-                          onClick={() => {
-                            const payload = {
-                              productId: site._id,
-                            };
-                            dispatch(deleteProductById(payload)).then(() => {
-                              dispatch(getProductsByUserId(auth.user._id));
-                            });
-                          }}
-                        >
-                          <IoIosTrash className="iconSite" />
-                        </button>
-                        {renderUpdateModel(site)}
-                        <button>
-                          <IoIosCloudUpload
-                            className="iconSite"
-                            onClick={() => setWebsiteUpdateModal(true)}
-                          />
-                        </button>
-                      </div>
-                      <a className="card">
+                      <a className="card" id="cardHover">
                         <div className="card__overlay">
                           <div className="card__header">
                             <svg
@@ -246,6 +218,31 @@ const Website = () => {
                                 </span>
                               )}
                             </span>
+                          </div>
+                          <div className="btn_ED ">
+                            <button className="btn btn-primery">
+                              <IoIosCloudUpload
+                                className="iconSite"
+                                onClick={() => setWebsiteUpdateModal(true)}
+                                value="edit"
+                              />
+                            </button>
+                            <IoIosTrash
+                              className="iconSite"
+                              onClick={() => {
+                                const payload = {
+                                  productId: site._id,
+                                };
+                                dispatch(deleteProductById(payload)).then(
+                                  () => {
+                                    dispatch(
+                                      getProductsByUserId(auth.user._id)
+                                    );
+                                  }
+                                );
+                              }}
+                            />
+                            {renderUpdateModel(site)}
                           </div>
                         </div>
                       </a>

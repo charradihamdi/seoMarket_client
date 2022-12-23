@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
-import { Container, Row, Col, Table } from "react-bootstrap";
+
 import Input from "../../components/UI/Input";
 import { Modal } from "../../components/MaterialUI";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,13 +8,8 @@ import { addProduct } from "../../actions/product.action";
 import { updateUser, userInfo } from "../../actions";
 import { profilePicture } from "../../components/Header/consPicture";
 import "./style.css";
-import { Redirect } from "react-router-dom";
-import {
-  MaterialInput,
-  MaterialButton,
-  DropdownMenu,
-  MaterialSelect,
-} from "../../components/MaterialUI";
+
+import { MaterialInput, MaterialButton } from "../../components/MaterialUI";
 const Profil = () => {
   const [userInfoUpdate, setUserUpdate] = useState(false);
   const [name, setName] = useState("");
