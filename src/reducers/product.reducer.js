@@ -1,15 +1,56 @@
 import { productConstants } from "../actions/constants";
 
-const initialState = {
+const initState = {
   products: [],
+
+  pageRequest: false,
+  user: {},
+  page: {},
+  error: null,
+  productDetails: {},
+  loading: false,
 };
 
-export default (state = initialState, action) => {
+export default (state = initState, action) => {
   switch (action.type) {
-    case productConstants.GET_ALL_PRODUCTS_SUCCESS:
+    case productConstants.GET_PRODUCTS_BY_SLUG:
       state = {
         ...state,
         products: action.payload.products,
+      };
+      break;
+    case productConstants.GET_PRODUCT_PAGE_REQUEST:
+      state = {
+        ...state,
+        pageRequest: true,
+      };
+      break;
+    case productConstants.GET_PRODUCT_PAGE_SUCCESS:
+      state = {
+        ...state,
+        page: action.payload.page,
+        pageRequest: false,
+      };
+      break;
+    case productConstants.GET_PRODUCT_PAGE_FAILURE:
+      state = {
+        ...state,
+        pageRequest: false,
+        error: action.payload.error,
+      };
+      break;
+    case productConstants.GET_PRODUCT_DETAILS_BY_ID_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case productConstants.GET_PRODUCT_DETAILS_BY_ID_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        productDetails: action.payload.productDetails,
+        user: action.payload.user,
       };
       break;
     case productConstants.GET_User_PRODUCTS_SUCCESS:
@@ -17,6 +58,13 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         products: action.payload.products,
+      };
+      break;
+    case productConstants.GET_PRODUCT_DETAILS_BY_ID_FAILURE:
+      state = {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
       break;
   }

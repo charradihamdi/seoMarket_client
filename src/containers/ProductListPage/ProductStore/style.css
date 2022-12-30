@@ -1,0 +1,113 @@
+.cardsItems {
+  background-color: #dbe0e0;
+  width: 22vw;
+}
+.displaysites {
+  margin-top: 2vh;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-self: center;
+  max-width: 80%;
+  margin-left: 10%;
+  height: 20vh;
+  max-height: 20vh;
+  background-color: rgb(255, 255, 255);
+  border: rgb(184, 184, 181);
+  border-radius: 8px;
+  height: 14vh;
+  border-bottom: 2px solid rgb(161, 157, 157);
+}
+.carouselItems {
+  border-radius: 12%;
+  padding: 8px;
+  height: 10%;
+  width: 10%;
+}
+.infosite {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.infosite p {
+  border: 0px solid rgb(233, 229, 229);
+  padding: 18px 8px 8px 8px;
+  width: 13vw;
+  display: flex;
+  align-items: start;
+  color: black;
+  text-decoration: none;
+  font-size: medium;
+}
+
+.Urlstyle {
+  width: 20vw;
+}
+.headList {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(255, 255, 255);
+  border-bottom-right-radius: 3%;
+  border-bottom-left-radius: 3%;
+  border-bottom: 1px solid #868686;
+  justify-content: start;
+  width: 80%;
+  max-width: 80%;
+  margin-left: 10%;
+  margin-top: 0%;
+  -webkit-box-shadow: 0 4px 6px 6px rgb(46, 12, 100);
+  -moz-box-shadow: 0 4px 6px 6px rgb(62, 30, 114);
+  box-shadow: 0 4px 6px -2px rgb(45, 45, 48);
+}
+.headList h3:first-child {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: start;
+  border: 0px solid #babbbb;
+  width: 7vw;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-style: italic;
+}
+.headList h3:nth-child(2) {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: start;
+  align-self: flex-start;
+  border: 0px solid #babbbb;
+  width: 31vw;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-style: italic;
+}
+
+.headList h3:nth-child(3) {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: start;
+  align-self: flex-start;
+  border: 0px solid #babbbb;
+  width: 13vw;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-style: italic;
+}
+
+.headList h3:nth-child(4) {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: start;
+  align-self: flex-start;
+  border: 0px solid #babbbb;
+  width: 13vw;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-style: italic;
+}
+.headList h3:nth-child(5) {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: start;
+  align-self: flex-start;
+  border: 0px solid #babbbb;
+  width: 13vw;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-style: italic;
+}

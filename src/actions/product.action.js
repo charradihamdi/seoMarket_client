@@ -1,26 +1,68 @@
 import axios from "../helpers/axios";
 import { productConstants } from "./constants";
-import { getInitialData } from "./initialData.action";
 
-// new action
-export const getProducts = () => {
+export const getProductsBySlug = (payload) => {
+  return async (dispatch) => {
+    const res = await axios.post(`/products/filter`, payload);
+
+    if (res.status === 200) {
+      dispatch({
+        type: productConstants.GET_PRODUCTS_BY_SLUG,
+        payload: res.data,
+      });
+    } else {
+      // dispatch({
+      //     type:
+      // })
+    }
+  };
+};
+
+export const getProductPage = (payload) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: productConstants.GET_ALL_PRODUCTS_REQUEST });
-      const res = await axios.post(`product/getProducts`);
-
+      const { cid, type } = payload.params;
+      type = "product";
+      const res = await axios.get(`/page/${cid}/${type}`);
+      dispatch({ type: productConstants.GET_PRODUCT_PAGE_REQUEST });
       if (res.status === 200) {
-        const { products } = res.data;
-
+        const { page } = res.data;
         dispatch({
-          type: productConstants.GET_ALL_PRODUCTS_SUCCESS,
-          payload: { products },
+          type: productConstants.GET_PRODUCT_PAGE_SUCCESS,
+          payload: { page },
         });
       } else {
-        dispatch({ type: productConstants.GET_ALL_PRODUCTS_FAILURE });
+        const { error } = res.data;
+        dispatch({
+          type: productConstants.GET_PRODUCT_PAGE_FAILURE,
+          payload: { error },
+        });
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+};
+
+export const getProductDetailsById = (payload) => {
+  return async (dispatch) => {
+    dispatch({ type: productConstants.GET_PRODUCT_DETAILS_BY_ID_REQUEST });
+    let res;
+    try {
+      const { productId } = payload.params;
+      res = await axios.get(`/product/${productId}`);
+      console.log(res);
+
+      dispatch({
+        type: productConstants.GET_PRODUCT_DETAILS_BY_ID_SUCCESS,
+        payload: { productDetails: res.data.product, user: res.data.user },
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: productConstants.GET_PRODUCT_DETAILS_BY_ID_FAILURE,
+        payload: { error: res.data.error },
+      });
     }
   };
 };
@@ -33,7 +75,7 @@ export const addProduct = (form) => {
       const res = await axios.post(`product/create`, form);
       if (res.status === 201) {
         dispatch({ type: productConstants.ADD_PRODUCT_SUCCESS });
-        dispatch(getInitialData());
+        dispatch(getProducts());
       } else {
         dispatch({ type: productConstants.ADD_PRODUCT_FAILURE });
       }
@@ -42,41 +84,20 @@ export const addProduct = (form) => {
     }
   };
 };
-export const activateProduct = (siteid) => {
+
+export const getProducts = () => {
   return async (dispatch) => {
     try {
-      dispatch({ type: productConstants.ACTIVATE_PRODUCT });
-      const res = await axios.post(`/activateprod/${siteid}`);
-
+      dispatch({ type: productConstants.GET_ALL_PRODUCTS_REQUEST });
+      const res = await axios.post(`product/getProducts`);
       if (res.status === 200) {
-        dispatch(getInitialData());
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
-// new action
-export const deleteProductById = (payload) => {
-  return async (dispatch) => {
-    try {
-      const res = await axios.delete(`product/deleteProductById`, {
-        data: { payload },
-      });
-
-      dispatch({ type: productConstants.DELETE_PRODUCT_BY_ID_REQUEST });
-      if (res.status === 202) {
-        dispatch({ type: productConstants.DELETE_PRODUCT_BY_ID_SUCCESS });
-        dispatch(getInitialData());
-        dispatch(getProducts());
-      } else {
-        const { error } = res.data;
+        const { products } = res.data;
         dispatch({
-          type: productConstants.DELETE_PRODUCT_BY_ID_FAILURE,
-          payload: {
-            error,
-          },
+          type: productConstants.GET_ALL_PRODUCTS_SUCCESS,
+          payload: { products },
         });
+      } else {
+        dispatch({ type: productConstants.GET_ALL_PRODUCTS_FAILURE });
       }
     } catch (error) {
       console.log(error);
@@ -99,6 +120,47 @@ export const getProductsByUserId = (id) => {
       } else {
         dispatch({ type: productConstants.GET_User_PRODUCTS_FAILURE });
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const deleteProductById = (payload) => {
+  return async (dispatch) => {
+    let { productId } = payload;
+
+    try {
+      const res = await axios.delete(`product/${productId}`);
+
+      dispatch({ type: productConstants.DELETE_PRODUCT_BY_ID_REQUEST });
+      if (res.status === 202) {
+        dispatch({ type: productConstants.DELETE_PRODUCT_BY_ID_SUCCESS });
+
+        dispatch(getProducts());
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: productConstants.DELETE_PRODUCT_BY_ID_FAILURE,
+          payload: {
+            error,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const updateProduct = (productId, data, id) => {
+  console.log(data);
+  return async (dispatch) => {
+    try {
+      dispatch({ type: "UPDATE_PRODUCT_REQUEST" });
+      const res = await axios.put(`/product/update`, data).then(() => {
+        dispatch(getProductsByUserId(id));
+      });
+      console.log(res);
     } catch (error) {
       console.log(error);
     }

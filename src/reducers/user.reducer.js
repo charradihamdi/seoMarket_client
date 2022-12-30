@@ -1,34 +1,18 @@
-import { userContants } from "../actions/constants"
-
+import { authConstants, userContants } from "../actions/constants";
+import { UPDATE_BIO, GET_USER } from "../actions/user.action";
 const initState = {
-    error: null,
-    message: '',
-    loading: false
-}
+  user: [],
+};
 
 export default (state = initState, action) => {
-    switch(action.type){
-        case userContants.USER_REGISTER_REQUEST:
-            state = {
-                ...state,
-                loading: true
-            }
-            break;
-        case userContants.USER_REGISTER_SUCCESS:
-            state = {
-                ...state,
-                loading: false,
-                message: action.payload.message
-            }
-            break;
-        case userContants.USER_REGISTER_FAILURE:
-            state = {
-                ...state,
-                loading: false,
-                error: action.payload.error
-            }
-            break;
-    }
+  switch (action.type) {
+    case userContants.GET_USER_SUCCESS:
+      state = {
+        ...state,
+        user: action.payload,
+      };
+      break;
+  }
 
-    return state;
-}
+  return state;
+};
