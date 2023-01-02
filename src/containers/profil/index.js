@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 
-import Input from "../../components/UI/Input";
-import { Modal } from "../../components/MaterialUI";
 import { useSelector, useDispatch } from "react-redux";
 import { addProduct } from "../../actions/product.action";
 import { updateUser, userInfo } from "../../actions";
 import { profilePicture } from "../../components/Header/consPicture";
 import "./style.css";
 import { signout } from "../../actions";
-import { MaterialInput, MaterialButton } from "../../components/MaterialUI";
 const Profil = () => {
   const [userInfoUpdate, setUserUpdate] = useState(false);
   const [name, setName] = useState("");
@@ -62,6 +59,7 @@ const Profil = () => {
       statut,
     };
     if (sexe === "" || country === "" || contactNumber === 0 || statut === "") {
+      alert("Please complete and submit your information");
       return;
     }
 
@@ -89,7 +87,12 @@ const Profil = () => {
                       alt=""
                     />
                     <h4>{auth.user.fullName}</h4>
-                    <span>Tunis</span>
+                    <span>
+                      {" "}
+                      {userduPDATE.user.data ? (
+                        <label>{userduPDATE.user.data.country}</label>
+                      ) : null}
+                    </span>
                   </div>
 
                   <div class="d-navigation">
@@ -162,7 +165,7 @@ const Profil = () => {
                             <div class="row">
                               <div class="col-xl-6 col-lg-6">
                                 <div class="form-group">
-                                  <label>First Name</label>
+                                  <label>First Name:</label>
                                   <label>{auth.user.firstName}</label>
                                 </div>
                               </div>
@@ -184,13 +187,13 @@ const Profil = () => {
                               </div>
                               <div class="col-xl-6 col-lg-6">
                                 <div class="form-group">
-                                  <label>Email</label>
+                                  <label>Email:</label>
                                   <label>{auth.user.email}</label>
                                 </div>
                               </div>
                               <div class="col-xl-6 col-lg-6">
                                 <div class="form-group">
-                                  <label>sexe:</label>
+                                  <label>Sexe:</label>
                                   {userduPDATE.user.data ? (
                                     <label>{userduPDATE.user.data.sexe}</label>
                                   ) : null}
@@ -250,6 +253,7 @@ const Profil = () => {
                             value={sexe}
                             onChange={(e) => setSexe(e.target.value)}
                           >
+                            <option value="">select sexe</option>
                             <option value="male">male</option>
                             <option value="female">female</option>
                             <option value="other">other</option>
@@ -294,7 +298,7 @@ const Profil = () => {
                                 type="checkbox"
                               />
                               <label for="sec" class="checkbox-custom-label">
-                                Enable Two-Step Verification via Phone
+                                Enable Verification via Phone
                               </label>
                             </div>
                           </div>

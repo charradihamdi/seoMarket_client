@@ -39,7 +39,10 @@ const ProductDetailsPage = (props) => {
   return (
     <Layout>
       <>
-        <div class="page-title search-form dark" style={{ marginTop: "150px" }}>
+        <div
+          class=" container page-title search-form dark"
+          style={{ marginTop: "150px" }}
+        >
           <div class="container">
             <div class="row">
               <div class="col-lg-12 col-md-12">
@@ -66,7 +69,15 @@ const ProductDetailsPage = (props) => {
                           alt=""
                         />
                       </h4>
-
+                      <h4 class="jbs_title">
+                        {product.productDetails.url}
+                        <img
+                          src="assets/img/verify.svg"
+                          class="ml-1"
+                          width="12"
+                          alt=""
+                        />
+                      </h4>
                       <ul class="jbx_info_list">
                         <li>
                           <div class="jb_types fulltime">
@@ -92,7 +103,7 @@ const ProductDetailsPage = (props) => {
         <section>
           <div class="container ">
             <div class="row ">
-              <div class="col-lg-8 col-md-12 col-sm-12">
+              <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="_job_detail_box">
                   <div class="_job_detail_single">
                     <h4>site Summary</h4>

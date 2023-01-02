@@ -135,7 +135,7 @@ const Header = (props) => {
               setLoginModal(true);
             }}
           >
-            <di className="loginButton">Login</di>
+            <div className="loginButton">Login</div>
           </a>
         }
         firstMenu={
