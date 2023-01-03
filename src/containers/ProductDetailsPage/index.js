@@ -9,6 +9,7 @@ import {
   IoIosHappy,
   IoMdEye,
   IoIosCash,
+  IoIosPerson,
 } from "react-icons/io";
 import { BiRupee } from "react-icons/bi";
 import { AiFillThunderbolt } from "react-icons/ai";
@@ -92,6 +93,12 @@ const ProductDetailsPage = (props) => {
                             (<IoMdEye />)
                           </div>
                         </li>
+                        <li>
+                          <div class="jb_types remote">
+                            600(
+                            <IoIosPerson /> Applied)
+                          </div>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -119,6 +126,7 @@ const ProductDetailsPage = (props) => {
                       src={`http://localhost:5000${product.productDetails.productPictures[0].img}`}
                       class="img-fluid"
                       alt=""
+                      style={{ width: "20vw", height: "20vh" }}
                     />
                   </div>
                   <div class="_jb_summary_caption">

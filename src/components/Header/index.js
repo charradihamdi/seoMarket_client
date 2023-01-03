@@ -251,22 +251,22 @@ const Header = (props) => {
         </div>
       </Modal>
       <div
-        class="header header-transparent dark-text"
+        className="header header-transparent dark-text"
         style={{ background: "white" }}
       >
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 col-md-12 col-sm-12">
               <nav
                 id="navigation"
-                class="navigationn navigation-landscape"
+                className="navigationn navigation-landscape"
                 style={{ border: "0px solid black" }}
               >
-                <div class="nav-header">
-                  <a class="nav-brand" href="/">
+                <div className="nav-header">
+                  <a className="nav-brand" href="/">
                     <img
                       src={logo}
-                      class="logo"
+                      className="logo"
                       alt=""
                       style={{
                         width: "80px",
@@ -275,16 +275,16 @@ const Header = (props) => {
                       }}
                     />
                   </a>
-                  <div class="nav-toggle"></div>
+                  <div className="nav-toggle"></div>
                 </div>
-                <div class="nav-menus-wrapper">
-                  <ul class="nav-menu">
-                    <li class="active">
+                <div className="nav-menus-wrapper">
+                  <ul className="nav-menu">
+                    <li className="active">
                       <a href="/">
-                        Home<span class="submenu-indicator"></span>
+                        Home<span className="submenu-indicator"></span>
                       </a>
                       <a href="/websites">
-                        websites<span class="submenu-indicator"></span>
+                        websites<span className="submenu-indicator"></span>
                       </a>
                     </li>
                     {auth.user.authenticate ? (
@@ -294,7 +294,7 @@ const Header = (props) => {
                     ) : null}
                   </ul>
 
-                  <ul class="nav-menu nav-menu-social align-to-right">
+                  <ul className="nav-menu nav-menu-social align-to-right">
                     <li
                       className={
                         !auth.authenticate && !auth.user.isActive

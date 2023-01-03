@@ -37,9 +37,7 @@ const Website = () => {
   const [typeSite, setTypeSite] = useState("");
   const [productPictures, setProductPictures] = useState([]);
   const [Pictures, setPictures] = useState("");
-  const [pImg, setPImg] = useState([]);
   const [images, setImages] = useState([]);
-
   const [visitorsPerMonth, setVisitorsPerMounth] = useState("");
   const [categoryId, setCategoryId] = useState("");
 
@@ -58,11 +56,9 @@ const Website = () => {
     webSite.products = webSite.products.sort(function (a, b) {
       let site1 = Date.parse(a.createdAt);
       let site2 = Date.parse(b.createdAt);
-
       return site2 - site1;
     });
   }
-
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
       options.push({ value: category._id, name: category.name });
@@ -86,6 +82,7 @@ const Website = () => {
     }
     if (descriptionValueOne === undefined) {
       alert("description required min 50 char");
+      return;
     }
     let byteSize = (str) => new Blob([str]).size;
     let result = byteSize(descriptionValueOne);
@@ -104,8 +101,10 @@ const Website = () => {
       !url.includes(".fr")
     ) {
       alert("https:// required in url and domain name ");
+      return;
     } else if (productPictures.length < 1) {
       alert("insert pictures");
+      return;
     } else {
       dispatch(addProduct(form)).then(() => {
         setWebsiteModal(false);
@@ -175,10 +174,9 @@ const Website = () => {
   };
   const handlewebSitePictures = (e) => {
     e.preventDefault();
-    console.log("event", e);
+
     const image = URL.createObjectURL(e.target.files[0]);
     setImages([...images, image]);
-    console.log("images", images);
 
     if (productPictures.length < 5)
       setProductPictures([...productPictures, e.target.files[0]]);
@@ -186,12 +184,12 @@ const Website = () => {
 
   const renderwebSites = () => {
     return (
-      <div class="col-xl-11 col-lg-11 col-md-12 col-sm-12 ml-3">
-        <div class="_dashboard_content ">
-          <div class="_dashboard_content_header">
-            <div class="_dashboard__header_flex">
+      <div className="col-xl-11 col-lg-11 col-md-12 col-sm-12 ml-3">
+        <div className="_dashboard_content ">
+          <div className="_dashboard_content_header">
+            <div className="_dashboard__header_flex">
               <h4>
-                <i class="ti-briefcase mr-1 "></i>Manage Sites
+                <i className="ti-briefcase mr-1 "></i>Manage Sites
               </h4>
             </div>
           </div>
@@ -199,21 +197,21 @@ const Website = () => {
           {webSite.products && webSite
             ? webSite.products.map((site) => {
                 return (
-                  <div class="_dashboard_content_body p-0">
-                    <div class="_dashboard_list_group">
-                      <div class="_dash_singl_box">
-                        <div class="_dash_singl_thumbs">
+                  <div className="_dashboard_content_body p-0">
+                    <div className="_dashboard_list_group">
+                      <div className="_dash_singl_box">
+                        <div className="_dash_singl_thumbs">
                           <img
                             src={`http://localhost:5000${site.productPictures[0].img}`}
-                            class="img-fluid "
+                            className="img-fluid "
                             style={{ width: "60px", height: "60px" }}
                             alt=""
                           />
                         </div>
-                        <div class="_dash_singl_captions">
-                          <h4 class="_jb_title">
-                            <a> {site.name}</a>
-                            <span class="_dash_status approval">
+                        <div className="_dash_singl_captions">
+                          <h4 className="_jb_title">
+                            {site.name}
+                            <span className="_dash_status approval">
                               {site.isActive ? (
                                 <span
                                   style={{
@@ -235,36 +233,37 @@ const Website = () => {
                               )}
                             </span>
                           </h4>
-                          <ul class="_grouping_list">
+                          <ul className="_grouping_list">
                             <li>
                               <span>
-                                <i class="ti-credit-card"></i>$
+                                <i className="ti-credit-card"></i>$
                                 {site.publicationPrice}({site.devise})k - (view){" "}
                                 {site.visitorsPerMonth}k
                               </span>
                             </li>
                             <li>
                               <span>
-                                <i class="ti-timer"></i>created At{" "}
+                                <i className="ti-timer"></i>created At{" "}
                                 {site.createdAt}
                               </span>
                             </li>
                           </ul>
-                          <ul class="_action_grouping_list">
+                          <ul className="_action_grouping_list">
                             <li>
-                              <a class="_aaplied_candidates">
+                              <a href="#" className="_aaplied_candidates">
                                 Applied<span>45</span>
                               </a>
                             </li>
 
                             <li onClick={() => setWebsiteUpdateModal(true)}>
                               <a
+                                href="#"
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title="Edit job"
-                                class="_edit_list_point"
+                                className="_edit_list_point"
                               >
-                                <i class="fa fa-edit"></i>
+                                <i className="fa fa-edit"></i>
                               </a>
                             </li>
                             <li
@@ -282,12 +281,13 @@ const Website = () => {
                               }}
                             >
                               <a
+                                href="#"
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title="Delete Job"
-                                class="_delete_point"
+                                className="_delete_point"
                               >
-                                <i class="fa fa-trash"></i>
+                                <i className="fa fa-trash"></i>
                               </a>
                             </li>
                           </ul>
@@ -421,7 +421,70 @@ const Website = () => {
                     <option value="Magazine">Magazine</option>
                   </select>
                 </>
+                <input
+                  style={{
+                    width: "100%",
+                    marginTop: "30px",
+                    border: "1px solid white",
+                    borderBottom: "2px solid #2874F0",
+                  }}
+                  className="form-control required"
+                  type="file"
+                  name="webSitePicture"
+                  value={Pictures}
+                  onChange={handlewebSitePictures}
+                />
+                <div
+                  style={{
+                    border: "1px solid #337BF1",
+                    margin: "8px 0px 14px 0px",
+                  }}
+                >
+                  {" "}
+                  <div className="row d-flex ">
+                    {productPictures.length > 0
+                      ? productPictures.map((pic, index) => (
+                          <div key={index} className="col-3 m-1">
+                            {
+                              <div
+                                style={{
+                                  backgroundImage: `url(${images[index]})`,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundSize: "contain,cover",
+                                  width: "140px",
+                                  height: "140px",
+                                }}
+                              >
+                                <i
+                                  className="fa fa-trash top-0 d-flex justify-content-center align-items-center Dpic"
+                                  style={{
+                                    color: "#F33066",
+                                    borderRadius: "6%",
+                                    background: "white",
+                                    width: "40px",
+                                    height: "40px",
+                                  }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setImages(
+                                      images.splice(images[index], index)
+                                    );
 
+                                    setProductPictures(
+                                      productPictures.splice(pic.name, index)
+                                    );
+                                  }}
+                                ></i>
+                              </div>
+                            }
+                          </div>
+                        ))
+                      : null}
+                  </div>
+                  {productPictures.length === 5 && (
+                    <p style={{ color: "red" }}>max 5 images</p>
+                  )}
+                </div>
                 <MaterialButton
                   title={"submit"}
                   textColor="#ffffff"
@@ -443,7 +506,6 @@ const Website = () => {
   const handleEditor = (e) => {
     setDescriptionValueOne(e);
   };
-  console.log(productPictures, images);
 
   return (
     <Layout className="header">
@@ -764,7 +826,7 @@ const Website = () => {
                                       );
                                     }}
                                   ></i>
-                                  <span className="bg-danger">{pic.name}</span>
+                                  -{" "}
                                 </div>
                               }
                             </div>

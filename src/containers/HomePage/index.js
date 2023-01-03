@@ -10,39 +10,39 @@ const HomePage = (props) => {
       <Layout>
         <>
           <div
-            class="hero-banner full jumbo-banner"
+            className="hero-banner full jumbo-banner"
             style={{ background: "#f4f9fd url(assets/img/bg2.png)" }}
           >
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-lg-7 col-md-8">
-                  <a class="header-promo light w-inline-block">
-                    <div class="label bg-success">SeoMarket</div>
-                    <div class="header-promo-text"> is now UK-Wide</div>
+            <div className="container">
+              <div className="row align-items-center">
+                <div className="col-lg-7 col-md-8">
+                  <a className="header-promo light w-inline-block">
+                    <div className="label bg-success">SeoMarket</div>
+                    <div className="header-promo-text"> is now UK-Wide</div>
                   </a>
                   <h1>
-                    Find <span class="text-info">your clients</span> & make sure
-                    your goal!
+                    Find <span className="text-info">your clients</span> & make
+                    sure your goal!
                   </h1>
-                  <p class="lead">Your dream is waiting for you.</p>
-                  <form class="search-big-form banner-search shadow mt-3">
-                    <div class="row m-0">
-                      <div class="col-lg-5 col-md-5 col-sm-12 p-0">
-                        <div class="form-group">
-                          <i class="ti-search"></i>
+                  <p className="lead">Your dream is waiting for you.</p>
+                  <form className="search-big-form banner-search shadow mt-3">
+                    <div className="row m-0">
+                      <div className="col-lg-5 col-md-5 col-sm-12 p-0">
+                        <div className="form-group">
+                          <i className="ti-search"></i>
                           <input
                             type="text"
-                            class="form-control b-0 b-r l-radius"
+                            className="form-control b-0 b-r l-radius"
                             placeholder="Site Title or Keywords"
                           />
                         </div>
                       </div>
 
-                      <div class="col-lg-5 col-md-4 col-sm-12 p-0">
-                        <div class="form-group">
+                      <div className="col-lg-5 col-md-4 col-sm-12 p-0">
+                        <div className="form-group">
                           <select
                             id="jb-category"
-                            class="js-states form-control b-0"
+                            className="js-states form-control b-0"
                           >
                             <option value="">&nbsp;</option>
                             <option value="1">Sports</option>
@@ -55,17 +55,17 @@ const HomePage = (props) => {
                         </div>
                       </div>
 
-                      <div class="col-lg-2 col-md-3 col-sm-12 p-0">
+                      <div className="col-lg-2 col-md-3 col-sm-12 p-0">
                         <button
                           type="button"
-                          class="btn dark-3 full-width r-radius"
+                          className="btn dark-3 full-width r-radius"
                         >
                           Search
                         </button>
                       </div>
                     </div>
                   </form>
-                  <div class="featured-category dark">
+                  <div className="featured-category dark">
                     <ul>
                       <li>Browse Category:</li>
                       <li>
@@ -98,23 +98,23 @@ const HomePage = (props) => {
                   </div>
                 </div>
 
-                <div class="col-lg-5 col-md-4">
+                <div className="col-lg-5 col-md-4">
                   <img
                     src="assets/img/a-2.png"
                     alt="latest property"
-                    class="img-fluid"
+                    className="img-fluid"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <section class="gray-light">
-            <div class="container gray-bg">
-              <div class="row justify-content-center">
-                <div class="col-lg-7 col-md-9">
-                  <div class="sec-heading">
+          <section className="gray-light">
+            <div className="container gray-bg">
+              <div className="row justify-content-center">
+                <div className="col-lg-7 col-md-9">
+                  <div className="sec-heading">
                     <h2>
-                      What People <span class="theme-cl-2">Saying</span>
+                      What People <span className="theme-cl-2">Saying</span>
                     </h2>
                     <p>
                       It is not enough to create and put a website online for it
@@ -129,28 +129,33 @@ const HomePage = (props) => {
                 </div>
               </div>
 
-              <div class="row" style={{}}>
-                <div class="col-lg-12 col-md-12">
-                  <div class="owl-theme middle-arrow-hover" id="reviews-slide">
-                    <div class="item testimonial-center">
-                      <div class="smart-tes-author">
-                        <div class="st-author-box">
-                          <div class="st-author-thumb">
+              <div className="row" style={{}}>
+                <div className="col-lg-12 col-md-12">
+                  <div
+                    className="owl-theme middle-arrow-hover"
+                    id="reviews-slide"
+                  >
+                    <div className="item testimonial-center">
+                      <div className="smart-tes-author">
+                        <div className="st-author-box">
+                          <div className="st-author-thumb">
                             <img
                               src="https://www.doyoubuzz.com/var/users/_/2010/12/15/22/86957/avatar/82242/avatar_cp_big.jpg?t=1672257930"
-                              class="img-fluid"
+                              className="img-fluid"
                               alt=""
                             />
                           </div>
-                          <div class="st-author-info">
-                            <h4 class="st-author-title">Aymen All wazzeni</h4>
-                            <span class="st-author-subtitle theme-cl">
+                          <div className="st-author-info">
+                            <h4 className="st-author-title">
+                              Aymen All wazzeni
+                            </h4>
+                            <span className="st-author-subtitle theme-cl">
                               CEO Of SeoMarket
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div class="smart-tes-content">
+                      <div className="smart-tes-content">
                         <p>
                           Passionné de Com’ et de Digital. Marketeur. Esprit
                           créatif. Réactif. Esprit analytique poussé. Formateur
@@ -162,25 +167,25 @@ const HomePage = (props) => {
                         </p>
                       </div>
                     </div>
-                    <div class="item testimonial-center">
-                      <div class="smart-tes-author">
-                        <div class="st-author-box">
-                          <div class="st-author-thumb">
+                    <div className="item testimonial-center">
+                      <div className="smart-tes-author">
+                        <div className="st-author-box">
+                          <div className="st-author-thumb">
                             <img
                               src="https://scontent.ftun10-1.fna.fbcdn.net/v/t39.30808-6/311825533_1096442941242672_8517673444947686367_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=GWQWpsMxOfoAX8fUenN&_nc_ht=scontent.ftun10-1.fna&oh=00_AfBHl58DU7xudMJZZgihVkt3waVCcO5F-qCkEkfM_X4bLA&oe=63B2F797"
-                              class="img-fluid"
+                              className="img-fluid"
                               alt=""
                             />
                           </div>
-                          <div class="st-author-info">
-                            <h4 class="st-author-title">Charradi hamdi</h4>
-                            <span class="st-author-subtitle theme-cl">
+                          <div className="st-author-info">
+                            <h4 className="st-author-title">Charradi hamdi</h4>
+                            <span className="st-author-subtitle theme-cl">
                               WEB DEVELOPER & ASSISTANT
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div class="smart-tes-content">
+                      <div className="smart-tes-content">
                         <p>
                           Our approach to website design is to create a website
                           that strengthens your company’s brand while ensuring

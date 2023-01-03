@@ -75,15 +75,15 @@ const Profil = () => {
   return (
     <Layout>
       <>
-        <section class="gray-bg pt-4" style={{ marginTop: "120px" }}>
-          <div class="container-fluid">
-            <div class="row m-0">
-              <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12">
-                <div class="dashboard-navbar overlio-top">
-                  <div class="d-user-avater">
+        <section className="gray-bg pt-4" style={{ marginTop: "120px" }}>
+          <div className="container-fluid">
+            <div className="row m-0">
+              <div className="col-xl-3 col-lg-4 col-md-12 col-sm-12">
+                <div className="dashboard-navbar overlio-top">
+                  <div className="d-user-avater">
                     <img
                       src={profilePicture}
-                      class="img-fluid rounded"
+                      className="img-fluid rounded"
                       alt=""
                     />
                     <h4>{auth.user.fullName}</h4>
@@ -95,16 +95,16 @@ const Profil = () => {
                     </span>
                   </div>
 
-                  <div class="d-navigation">
+                  <div className="d-navigation">
                     <ul id="metismenu">
                       <li>
                         <a href="/website">
-                          <i class="ti-dashboard"></i>Dashboard
+                          <i className="ti-dashboard"></i>Dashboard
                         </a>
                       </li>
-                      <li class="active">
+                      <li className="active">
                         <a href="/profil">
-                          <i class="ti-user"></i>My Profile
+                          <i className="ti-user"></i>My Profile
                         </a>
                       </li>
 
@@ -118,18 +118,18 @@ const Profil = () => {
                 </div>
               </div>
 
-              <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
-                <div class="row">
-                  <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="bredcrumb_wrap">
+              <div className="col-xl-9 col-lg-8 col-md-12 col-sm-12">
+                <div className="row">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
+                    <div className="bredcrumb_wrap">
                       <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                          <li class="breadcrumb-item">
+                        <ol className="breadcrumb">
+                          <li className="breadcrumb-item">
                             <a href="#">Home</a>
                           </li>
 
                           <li
-                            class="breadcrumb-item active"
+                            className="breadcrumb-item active"
                             aria-current="page"
                           >
                             My Profile
@@ -140,43 +140,46 @@ const Profil = () => {
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="_dashboard_content">
-                      <div class="_dashboard_content_header">
-                        <div class="_dashboard__header_flex">
+                <div className="row">
+                  <div className="col-lg-12 col-md-12 col-sm-12">
+                    <div className="_dashboard_content">
+                      <div className="_dashboard_content_header">
+                        <div className="_dashboard__header_flex">
                           <h4>
-                            <i class="fa fa-user mr-1"></i>My Account
+                            <i className="fa fa-user mr-1"></i>My Account
                           </h4>
                         </div>
                       </div>
 
-                      <div class="_dashboard_content_body">
-                        <div class="row">
-                          <div class="col-auto">
-                            <div class="custom-file avater_uploads">
-                              <label class="custom-file-label" for="customFile">
-                                <i class="fa fa-user"></i>
+                      <div className="_dashboard_content_body">
+                        <div className="row">
+                          <div className="col-auto">
+                            <div className="custom-file avater_uploads">
+                              <label
+                                className="custom-file-label"
+                                for="customFile"
+                              >
+                                <i className="fa fa-user"></i>
                               </label>
                             </div>
                           </div>
 
-                          <div class="col">
-                            <div class="row">
-                              <div class="col-xl-6 col-lg-6">
-                                <div class="form-group">
+                          <div className="col">
+                            <div className="row">
+                              <div className="col-xl-6 col-lg-6">
+                                <div className="form-group">
                                   <label>First Name:</label>
                                   <label>{auth.user.firstName}</label>
                                 </div>
                               </div>
-                              <div class="col-xl-6 col-lg-6">
-                                <div class="form-group">
+                              <div className="col-xl-6 col-lg-6">
+                                <div className="form-group">
                                   <label>Last Name:</label>
                                   <label>{auth.user.lastName}</label>
                                 </div>
                               </div>
-                              <div class="col-xl-6 col-lg-6">
-                                <div class="form-group">
+                              <div className="col-xl-6 col-lg-6">
+                                <div className="form-group">
                                   <label>contact Number:</label>
                                   {userduPDATE.user.data ? (
                                     <label>
@@ -185,22 +188,22 @@ const Profil = () => {
                                   ) : null}
                                 </div>
                               </div>
-                              <div class="col-xl-6 col-lg-6">
-                                <div class="form-group">
+                              <div className="col-xl-6 col-lg-6">
+                                <div className="form-group">
                                   <label>Email:</label>
                                   <label>{auth.user.email}</label>
                                 </div>
                               </div>
-                              <div class="col-xl-6 col-lg-6">
-                                <div class="form-group">
+                              <div className="col-xl-6 col-lg-6">
+                                <div className="form-group">
                                   <label>Sexe:</label>
                                   {userduPDATE.user.data ? (
                                     <label>{userduPDATE.user.data.sexe}</label>
                                   ) : null}
                                 </div>
                               </div>
-                              <div class="col-xl-6 col-lg-6">
-                                <div class="form-group">
+                              <div className="col-xl-6 col-lg-6">
+                                <div className="form-group">
                                   <label>Status:</label>
                                   {userduPDATE.user.data ? (
                                     <label>
@@ -214,21 +217,21 @@ const Profil = () => {
                         </div>
                       </div>
                     </div>
-                    <div class="_dashboard_content">
-                      <div class="_dashboard_content_header">
-                        <div class="_dashboard__header_flex">
+                    <div className="_dashboard_content">
+                      <div className="_dashboard_content_header">
+                        <div className="_dashboard__header_flex">
                           <h4>
-                            <i class="ti-lock-open mr-1"></i>Set profitional
+                            <i className="ti-lock-open mr-1"></i>Set profitional
                             information
                           </h4>
                         </div>
                       </div>
-                      <div class="col-xl-6 col-lg-6">
-                        <div class="form-group with-light">
+                      <div className="col-xl-6 col-lg-6">
+                        <div className="form-group with-light">
                           <label>Status</label>
                           <select
                             id="country"
-                            class="form-control "
+                            className="form-control "
                             type="select "
                             label="status"
                             placeholder="status"
@@ -242,11 +245,11 @@ const Profil = () => {
                             <option value="site owner">site owner</option>
                           </select>
                         </div>
-                        <div class="form-group with-light">
+                        <div className="form-group with-light">
                           <label>sexe</label>
                           <select
                             id="country"
-                            class="form-control "
+                            className="form-control "
                             type="select "
                             label="sexe"
                             placeholder="sexe"
@@ -260,10 +263,10 @@ const Profil = () => {
                           </select>
                         </div>
                       </div>
-                      <div class="_dashboard_content_body">
-                        <div class="row">
-                          <div class="col-xl-4 col-lg-4">
-                            <div class="form-group">
+                      <div className="_dashboard_content_body">
+                        <div className="row">
+                          <div className="col-xl-4 col-lg-4">
+                            <div className="form-group">
                               <label>contact Number</label>
                               <input
                                 type="number"
@@ -272,32 +275,35 @@ const Profil = () => {
                                 onChange={(e) =>
                                   setContactNumber(e.target.value)
                                 }
-                                class="form-control with-light"
+                                className="form-control with-light"
                               />
                             </div>
                           </div>
-                          <div class="col-xl-4 col-lg-4">
-                            <div class="form-group">
+                          <div className="col-xl-4 col-lg-4">
+                            <div className="form-group">
                               <label>country</label>
                               <input
                                 type="text"
                                 label="country"
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
-                                class="form-control with-light"
+                                className="form-control with-light"
                               />
                             </div>
                           </div>
 
-                          <div class="col-xl-12 col-lg-12">
-                            <div class="form-group">
+                          <div className="col-xl-12 col-lg-12">
+                            <div className="form-group">
                               <input
                                 id="sec"
-                                class="checkbox-custom"
+                                className="checkbox-custom"
                                 name="Security"
                                 type="checkbox"
                               />
-                              <label for="sec" class="checkbox-custom-label">
+                              <label
+                                for="sec"
+                                className="checkbox-custom-label"
+                              >
                                 Enable Verification via Phone
                               </label>
                             </div>
@@ -307,7 +313,7 @@ const Profil = () => {
                     </div>
                     <button
                       type="button"
-                      class="btn btn-save"
+                      className="btn btn-save"
                       onClick={userUpdate}
                     >
                       Save Changes
