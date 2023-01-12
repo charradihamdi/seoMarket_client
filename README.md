@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
   _____________________________
-![Alt text](./seomarket.mp4)
+![Alt text](seomarket.mp4)
 ### `npm start`
 
 Runs the app in the development mode.<br />
