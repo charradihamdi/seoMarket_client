@@ -19,8 +19,12 @@ In the project directory, you can run:
 ![image](https://user-images.githubusercontent.com/76883216/212055707-0b5a446d-ab9e-470b-8e8c-1695aac742fd.png)
 ![image](https://user-images.githubusercontent.com/76883216/212055729-a895b1e8-718a-4a54-8cba-5e0c5f81f64b.png)
 ![image](https://user-images.githubusercontent.com/76883216/212055754-87ccbb99-d9a1-45f2-8752-9433ae5495b3.png)
-![320514028_1183940265871994_5708453452041723448_n](https://user-images.githubusercontent.com/76883216/212055903-303608cb-0eb6-4ba7-a754-a2d4c5f7121d.png)
-![322670622_1527537857729471_8222820255863830390_n](https://user-images.githubusercontent.com/76883216/212056001-63233db8-8bc4-4784-b88d-b0b9b32023e1.jpg)
-![322223129_858015875407538_6491712830207983520_n](https://user-images.githubusercontent.com/76883216/212056002-659421de-0985-451b-b96c-1a99eb28edda.jpg)
-![322322341_932651580975720_7922549995358523722_n](https://user-images.githubusercontent.com/76883216/212056003-f4f22f7a-85b4-4cb5-a353-377aeebf7f7b.jpg)
-https://mega.nz/file/MPAV1aQZ#iUK1fx2FL6m9NpYIkW-Uptob2wAt9p-naaPF1X1qJVY
+![image](https://user-images.githubusercontent.com/76883216/212057314-97010ecb-912b-430a-9a3c-7594eb7386dc.png)
+![image](https://user-images.githubusercontent.com/76883216/212057337-8db4c27a-173f-4e0f-b952-5debe5e1003d.png)
+![image](https://user-images.githubusercontent.com/76883216/212057400-8ca6da6c-5725-4152-9f35-a33812252bfb.png)
+![image](https://user-images.githubusercontent.com/76883216/212057453-2633736e-de67-4ff3-a55e-93646463b066.png)
+![image](https://user-images.githubusercontent.com/76883216/212057505-08cb2680-6ae9-4d98-be59-9c096b79f94c.png)
+![image](https://user-images.githubusercontent.com/76883216/212057528-43c24515-41ed-4cae-b398-1b84c78ae052.png)
+![image](https://user-images.githubusercontent.com/76883216/212057566-734ac8a2-8cc6-47e4-b89c-e8d3b2c6ee21.png)
+![image](https://user-images.githubusercontent.com/76883216/212057592-d34e5d55-98f6-491a-8e4a-d31c88260c3b.png)
+https://mega.nz/file/RPAC0DAR#y3n6RN8W4e_y1Lk9OESyprrW9UiR1ItMgO1FNzoqGtA
