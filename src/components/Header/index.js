@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import goldenStar from "../../images/logo/golden-star.png";
 import { IoIosArrowDown, IoIosCart, IoIosSearch } from "react-icons/io";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import {
   Modal,
   MaterialInput,
@@ -15,10 +19,6 @@ import Cart from "../UI/Cart";
 import { NavLink, Link, Redirect } from "react-router-dom";
 import { profilePicture } from "./consPicture";
 import logo from "./teamwork.jpg";
-/**
- * @author
- * @function Header
- **/
 
 const Header = (props) => {
   const [loginModal, setLoginModal] = useState(false);
